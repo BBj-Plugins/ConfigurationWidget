@@ -18,7 +18,7 @@ use com.basis.bbj.datatypes.TemplatedString
 use com.basis.startup.type.BBjException
 use com.basiscomponents.bc.BusinessComponent
 use com.basiscomponents.db.BBArrayList
-use com.basiscomponents.uicomponents.JLibDataFileHandler
+use com.basiscomponents.util.JLibDataFileHandler
 use com.google.common.base.Strings
 use com.basis.filesystem.ConnectionMgr
 use com.basis.filesystem.Filesystem
