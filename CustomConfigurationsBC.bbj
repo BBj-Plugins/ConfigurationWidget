@@ -4,8 +4,8 @@ REM  * @author jcorea
 REM  * Custom implementation of the ConfigurationsBC, which uses creates a new VKEYED file "configurationWidgetConfigs" in bbj/cfg folder (unless it already exists)
 REM  * 
 REM  */
-use com.basiscomponents.uicomponents.ConfigurationsBC
-use com.basiscomponents.uicomponents.ConfigurationsBCIF
+use com.basiscomponents.bc.ConfigurationsBC
+use com.basiscomponents.bc.IConfigurationsBC
 use com.basiscomponents.db.DataRow
 use com.basiscomponents.db.ResultSet
 
@@ -23,7 +23,7 @@ use com.google.common.base.Strings
 use com.basis.filesystem.ConnectionMgr
 use com.basis.filesystem.Filesystem
 
-class public CustomConfigurationsBC implements BusinessComponent,ConfigurationsBCIF
+class public CustomConfigurationsBC implements BusinessComponent,IConfigurationsBC
     field protected ConfigurationsBC configurationsBC!
 
     method public CustomConfigurationsBC(String userName!)

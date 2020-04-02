@@ -1,12 +1,12 @@
 REM /**
-REM  * PersistentStateIF.bbj
+REM  * IPersistentState.bbj
 REM  * @author jcorea
 REM  * this interface can implemented for components whose state is supposed be saved/loaded by the configuration Widget.
 REM  * all classes that implement this interface (for example the BusinessGrid plugin) can be handled by the ConfigurationWidget
 REM  *
 REM  */
 
-interface public PersistentStateIF
+interface public IPersistentState
     rem /**
     rem  * this method will be called to apply the state given by the widget
     rem  * @param state! state string with the state which was stored by the widget

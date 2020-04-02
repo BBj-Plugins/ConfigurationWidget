@@ -10,8 +10,8 @@ use ::BBjWidget/BBjWidget.bbj::BBjWidget
 use ::BBjGridExWidget/BBjGridExWidgetState.bbj::BBjGridExWidgetState
 use ::ConfigurationWidget/CustomConfigurationsBC.bbj::CustomConfigurationsBC
 use ::ConfigurationWidget/ConfigurationStateHandler.bbj::ConfigurationStateHandler
-use ::ConfigurationWidget/PersistentStateIF.bbj::PersistentStateIF
-use com.basiscomponents.uicomponents.ConfigurationsBCIF
+use ::ConfigurationWidget/IPersistentState.bbj::IPersistentState
+use com.basiscomponents.bc.IConfigurationsBC
 use com.basiscomponents.db.DataRow
 use com.basiscomponents.db.ResultSet
 use java.util.UUID
@@ -25,7 +25,7 @@ class public ConfigurationWidget extends BBjWidget
     field protected BBjButton buttonAdmin!
     field protected BBjListEdit listEditOptions!
     field protected ResultSet availableConfigs!
-    field protected ConfigurationsBCIF bc!
+    field protected IConfigurationsBC bc!
     field protected Boolean adminModeEnabled!
     field protected Boolean allowAdmin!
     
@@ -51,7 +51,7 @@ class public ConfigurationWidget extends BBjWidget
     method private ConfigurationWidget()
     methodend
 
-    method public ConfigurationWidget(BBjWindow container!, BBjNumber id, BBjNumber x, BBjNumber y, PersistentStateIF statePersistable!, Boolean allowAdmin!, String realm!, String keyx!, ConfigurationsBCIF bc!)
+    method public ConfigurationWidget(BBjWindow container!, BBjNumber id, BBjNumber x, BBjNumber y, IPersistentState statePersistable!, Boolean allowAdmin!, String realm!, String keyx!, IConfigurationsBC bc!)
         #super!()
         #adminModeEnabled! = Boolean.FALSE
         #allowAdmin! = allowAdmin!

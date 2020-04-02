@@ -7,15 +7,15 @@ REM  * between the widget and the component
 REM  *
 REM  */
 
-use ::ConfigurationWidget/PersistentStateIF.bbj::PersistentStateIF
+use ::ConfigurationWidget/IPersistentState.bbj::IPersistentState
 use ::ConfigurationWidget/ConfigurationWidget.bbj::ConfigurationWidget
 
 class public ConfigurationStateHandler
-    field protected PersistentStateIF statefulObject!
+    field protected IPersistentState statefulObject!
     field protected ConfigurationWidget configurationWidget!
     field protected Boolean suppressNextStateChangeEvent! = Boolean.FALSE
     
-    method public ConfigurationStateHandler(PersistentStateIF statefulObject!, ConfigurationWidget configurationWidget!)
+    method public ConfigurationStateHandler(IPersistentState statefulObject!, ConfigurationWidget configurationWidget!)
         #statefulObject! = statefulObject!
         #configurationWidget! = configurationWidget!
         configurationWidget!.setStateHandler(#this!)
