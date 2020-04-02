@@ -161,11 +161,11 @@ REM         escape
     method protected void setIcons()
         bbjHome! = new File(System.getProperty("basis.BBjHome"),err=*next)
         if bbjHome! = null() then methodret
-        #iconPrefix! = bbjHome!.getPath() + File.separator + "plugins" + File.separator + "BusinessGrid" + File.separator + "ConfigurationWidget" + File.separator
-        #buttonDelete!.setImageFile(    #iconPrefix! + "icon/delete.png")
-        #buttonSave!.setImageFile(      #iconPrefix! + "icon/save.png")
+
+        #buttonDelete!.setImageFile(    "ConfigurationWidget/icon/delete.png")
+        #buttonSave!.setImageFile(      "ConfigurationWidget/icon/save.png")
         if #allowAdmin! then
-            #buttonAdmin!.setImageFile( #iconPrefix! + "icon/admin_off.png")
+            #buttonAdmin!.setImageFile( "ConfigurationWidget/icon/admin_off.png")
         endif
     methodend
     
