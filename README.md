@@ -1,1 +1,3 @@
 # ConfigurationWidget
+This Widget allows the user to save/load configurations, like gridstate, position for BBj UI programs. The user can create multiple configurations and load them via a listedit dropbox. Multiple users can access the same config file and save their own configurations. There also is an admin mode, which allows to set/delete default configurations.
+The Widget can handle all classes that implement the PersistentStateIF interface. An example would be the BusinessGrid plugin, which already implements this interface.
