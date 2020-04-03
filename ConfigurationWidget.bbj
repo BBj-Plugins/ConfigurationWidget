@@ -50,6 +50,10 @@ class public ConfigurationWidget extends BBjWidget
     rem  */
     method private ConfigurationWidget()
     methodend
+    
+    method public ConfigurationWidget(BBjWindow container!, BBjNumber id, BBjNumber x, BBjNumber y, IPersistentState statePersistable!, Boolean allowAdmin!, IConfigurationsBC bc!)
+        #this!(container!, id, x, y, statePersistable!, allowAdmin!, "", "", bc!)
+    methodend
 
     method public ConfigurationWidget(BBjWindow container!, BBjNumber id, BBjNumber x, BBjNumber y, IPersistentState statePersistable!, Boolean allowAdmin!, String realm!, String keyx!, IConfigurationsBC bc!)
         #super!()
@@ -62,6 +66,22 @@ class public ConfigurationWidget extends BBjWidget
         #userName! = #bc!.getUserName()
         #stateHandler! = new ConfigurationStateHandler(statePersistable!, #this!)
         #create(container!,id,x,y,160,20)
+    methodend
+    
+    method public void setRealm(String realm!)
+        #realm! = realm!
+    methodend
+    
+    method public void setKeyX(String keyx!)
+        #keyx! = keyx!
+    methodend
+    
+    method public String getRealm()
+        methodret #realm!
+    methodend
+    
+    method public String getKeyX()
+        methodret #keyx!
     methodend
     
     rem /**
