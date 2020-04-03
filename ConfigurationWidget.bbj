@@ -99,14 +99,6 @@ class public ConfigurationWidget extends BBjWidget
             buttonsY = 0
             #getCanvas().setSize(#getCanvas().getWidth(),20)
         endif
-REM         ?"X: " + str(#getX())
-REM         ?"width: " + str(#getCanvas().getWidth())
-REM         ?"xStart: " + str(xStart)
-REM         ?"xEnd: " + str(xEnd)
-REM         ?"totalLength: " + str(totalLength)
-REM         ?"buttonsX: " + str(buttonsX)
-REM         ?"buttonsY: " + str(buttonsY)
-REM         escape
         #getCanvas().setLocation(xStart,#getY())
         #listEditOptions!.setLocation(0,0)
         #listEditOptions!.setSize(100,100)
@@ -276,8 +268,9 @@ REM         BBjAPI().setCustomEventCallback(#getOnStateChangeEventName(), #this!
     methodend
     
     rem /**
-    rem  * returns whether the given DataRow would overwrite an existing config when using this datarow in bc.write().
+    rem  * @return returns whether the given DataRow would overwrite an existing config when using this datarow in bc.write().
     rem  * when false, this datarow would create a new entry. 
+    rem  * @param dr! datarow which is to be checked
     rem  */
     method protected Boolean wouldWriteOverrideOtherConfig(DataRow dr!)
         dr! = dr!.clone()

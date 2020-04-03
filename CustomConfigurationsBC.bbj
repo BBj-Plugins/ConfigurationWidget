@@ -35,7 +35,7 @@ class public CustomConfigurationsBC implements BusinessComponent,IConfigurations
             path! = dsk("") + dir("") + "configurationWidgetConfigs"
         endif
 REM         path! = "C:\Users\FOO\Documents\00tempConfigscanbedeleted"
-        template! = "REALM:C(3*=10):DESCRIPTION=Realm:,KEYX:C(40*=10):DESCRIPTION=Key:,USERID:C(5*=10):DESCRIPTION=UserID:,SETTING:C(40*=10):DESCRIPTION=Setting:,CR_MONT:C(10*=10):DESCRIPTION=created_user:,CR_TS_LD:C(14*=10):DESCRIPTION=created_timestamp:,MOD_MONT:C(10*=10):DESCRIPTION=modification_user:,MOD_TS_LD:C(14*=10):DESCRIPTION=modification_timestamp:,CONFIG:C(1*=10):DESCRIPTION=Configuration_payload:"
+        template! = "REALM:C(3*=10):DESCRIPTION=Realm:,KEYX:C(40*=10):DESCRIPTION=Key:,USERID:C(64*=10):DESCRIPTION=UserID:,SETTING:C(40*=10):DESCRIPTION=Setting:,CR_MONT:C(10*=10):DESCRIPTION=createduser:,CR_TS_LD:C(14*=10):DESCRIPTION=createdtimestamp:,MOD_MONT:C(10*=10):DESCRIPTION=modificationuser:,MOD_TS_LD:C(14*=10):DESCRIPTION=modificationtimestamp:,CONFIG:C(1*=10):DESCRIPTION=Configurationpayload:"
         #createDataFile(path!,template!, 4)
         #configurationsBC! = new ConfigurationsBC(path!, userName!)
     methodend
