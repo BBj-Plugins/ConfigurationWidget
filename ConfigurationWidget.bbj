@@ -73,11 +73,27 @@ class public ConfigurationWidget extends BBjWidget
         #create(container!,id,x,y,160,20)
     methodend
     
+    rem /**
+    rem  * sets the bc and the userName from the bc and redraws, which triggers an init
+    rem  */
     method public void setBC(IConfigurationsBC bc!)
         #bcInitialized! = Boolean.FALSE
         #bc! = bc!
-        #userName! = #bc!.getUserName()
+        #setUserName(#bc!.getUserName())
         #redraw(0)
+    methodend
+    
+    rem /**
+    rem  * sets the username in the widget and also in the bc depending if admin mode is enabled
+    rem  */
+    method public void setUserName(String userName!)
+        #userName! = userName!
+        if #bc! = null() then methodret
+        if #adminModeEnabled! then
+            #bc!.setUserName(#bc!.getAdminUser())
+        else
+            #bc!.setUserName(userName!)
+        endif
     methodend
     
     method public void setRealm(String realm!)
@@ -89,6 +105,10 @@ class public ConfigurationWidget extends BBjWidget
     methodend
     
     method public String getRealm()
+        methodret #realm!
+    methodend
+    
+    method public String getUserName()
         methodret #realm!
     methodend
     
@@ -383,7 +403,7 @@ REM             #buttonAdmin!.setForeColor(#ADMIN_DISABLED_COLOR!)
 REM             #buttonAdmin!.setForeColor(#ADMIN_ENABLED_COLOR!)
             #buttonAdmin!.setImageFile(#iconPrefix! + "icon/admin_on.png")
             #buttonAdmin!.setShortCue("Admin mode (currently enabled)")
-            #bc!.setUserName("")
+            #bc!.setUserName(#bc!.getAdminUser())
         endif
         #updateButtonDelete()
     methodend
