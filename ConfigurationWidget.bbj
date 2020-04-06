@@ -28,6 +28,7 @@ class public ConfigurationWidget extends BBjWidget
     field protected IConfigurationsBC bc!
     field protected Boolean adminModeEnabled!
     field protected Boolean allowAdmin!
+    field protected Boolean bcInitialized! = Boolean.FALSE
     
     field protected String realm!
     field protected String keyx!
@@ -51,8 +52,8 @@ class public ConfigurationWidget extends BBjWidget
     method private ConfigurationWidget()
     methodend
     
-    method public ConfigurationWidget(BBjWindow container!, BBjNumber id, BBjNumber x, BBjNumber y, IPersistentState statePersistable!, Boolean allowAdmin!, IConfigurationsBC bc!)
-        #this!(container!, id, x, y, statePersistable!, allowAdmin!, "", "", bc!)
+    method public ConfigurationWidget(BBjWindow container!, BBjNumber id, BBjNumber x, BBjNumber y, IPersistentState statePersistable!, Boolean allowAdmin!)
+        #this!(container!, id, x, y, statePersistable!, allowAdmin!, "", "", null())
     methodend
 
     method public ConfigurationWidget(BBjWindow container!, BBjNumber id, BBjNumber x, BBjNumber y, IPersistentState statePersistable!, Boolean allowAdmin!, String realm!, String keyx!, IConfigurationsBC bc!)
@@ -62,10 +63,21 @@ class public ConfigurationWidget extends BBjWidget
         #realm! = realm!
         #keyx! = keyx!
         #container! = container!
-        #bc! = bc!
-        #userName! = #bc!.getUserName()
+        if bc! <> null() then
+            #bc! = bc!
+            #userName! = #bc!.getUserName()
+        else 
+            #userName! = ""
+        endif
         #stateHandler! = new ConfigurationStateHandler(statePersistable!, #this!)
         #create(container!,id,x,y,160,20)
+    methodend
+    
+    method public void setBC(IConfigurationsBC bc!)
+        #bcInitialized! = Boolean.FALSE
+        #bc! = bc!
+        #userName! = #bc!.getUserName()
+        #redraw(0)
     methodend
     
     method public void setRealm(String realm!)
@@ -102,8 +114,12 @@ class public ConfigurationWidget extends BBjWidget
                 #buttonAdmin!       = #getCanvas().addButton(#getCanvas().getAvailableControlID(), 140,0,20,20,"")
                 #buttonAdmin!.setShortCue("Admin mode (currently disabled)")
             endif
-            #init()
         FI
+        if !#bcInitialized! and #bc!<> null() then
+            #init()
+            #bcInitialized! = Boolean.TRUE
+        endif
+        
         xEnd = #getX() + 160
         if xEnd > #container!.getWidth() then xEnd = #container!.getWidth()
         xStart = xEnd - 160

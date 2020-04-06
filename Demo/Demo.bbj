@@ -23,7 +23,12 @@ rem setting up our sample widget and the BusinessGrrid
 bc! = new CustomConfigurationsBC("user")
 gridWindow! = wnd!.addChildWindow(wnd!.getAvailableControlID(), 0, 50, 750, 600, 1)
 grid! = new BusinessGrid(gridWindow!, 101, 0, 0, 750, 600,err=businessgriderror)
-sampleWidget! = new ConfigurationWidget(cast(BBjWindow,wnd!),wnd!.getAvailableControlID(), 550, 20, grid!, Boolean.TRUE, "GRD", "Demo.bbj", bc!)
+sampleWidget! = new ConfigurationWidget(cast(BBjWindow,wnd!),wnd!.getAvailableControlID(), 550, 20, grid!, Boolean.TRUE)
+sampleWidget!.setRealm("GRD")
+sampleWidget!.setRealm("Demo.bbj")
+sampleWidget!.setBC(bc!)
+
+REM sampleWidget! = new ConfigurationWidget(cast(BBjWindow,wnd!),wnd!.getAvailableControlID(), 550, 20, grid!, Boolean.TRUE, "GRD", "Demo.bbj", bc!)
 
 
 process_events
