@@ -40,11 +40,15 @@ class public ConfigurationWidget extends BBjWidget
     field protected static String ON_STATE_CHANGE! = "STATE_CHANGE"
     field protected static String ON_CONFIGURATION_CHANGE! = "CONFIGURATION_CHANGE"
     
+    field protected String iconButtonDelete! =          "ConfigurationWidget\icon\ic_delete_forever_black_24dp.png"
+    field protected String iconButtonSave! =            "ConfigurationWidget\icon\ic_done_black_24dp.png"
+    field protected String iconButtonAdminEnabled! =    "ConfigurationWidget\icon\ic_person_black_24dp.png"
+    field protected String iconButtonAdminDisabled! =   "ConfigurationWidget\icon\ic_person_white_24dp.png"
+    
     
     field protected BBjNumber selectedIndex = -1
     field protected String widgetID! = UUID.randomUUID().toString()
     field protected ConfigurationStateHandler stateHandler!
-    field protected String iconPrefix! = ""
     
     rem /**
     rem  * default constructor disabled
@@ -114,6 +118,27 @@ class public ConfigurationWidget extends BBjWidget
     
     method public String getKeyX()
         methodret #keyx!
+    methodend
+    
+    
+    method public void setIconButtonDelete(String iconButtonDelete!)
+        #iconButtonDelete! = iconButtonDelete!
+        #setIcons()
+    methodend
+    
+    method public void setIconButtonSave(String iconButtonSave!)
+        #iconButtonSave! = iconButtonSave!
+        #setIcons()
+    methodend
+    
+    method public void setIconButtonAdminEnabled(String iconButtonAdminEnabled!)
+        #iconButtonSave! = iconButtonSave!
+        #setIcons()
+    methodend
+    
+    method public void setIconButtonAdminDisabled(String iconButtonAdminDisabled!)
+        #iconButtonAdminDisabled! = iconButtonAdminDisabled!
+        #setIcons()
     methodend
     
     rem /**
@@ -207,13 +232,10 @@ class public ConfigurationWidget extends BBjWidget
     rem  * sets the images for the buttons
     rem  */
     method protected void setIcons()
-        bbjHome! = new File(System.getProperty("basis.BBjHome"),err=*next)
-        if bbjHome! = null() then methodret
-
-        #buttonDelete!.setImageFile(    "ConfigurationWidget/icon/delete.png")
-        #buttonSave!.setImageFile(      "ConfigurationWidget/icon/save.png")
+        #buttonDelete!.setImageFile(    #iconButtonDelete!)
+        #buttonSave!.setImageFile(      #iconButtonSave!)
         if #allowAdmin! then
-            #buttonAdmin!.setImageFile( "ConfigurationWidget/icon/admin_off.png")
+            #buttonAdmin!.setImageFile( #iconButtonAdminDisabled!)
         endif
     methodend
     
@@ -395,13 +417,13 @@ REM         BBjAPI().setCustomEventCallback(#getOnStateChangeEventName(), #this!
         if #adminModeEnabled! then
             #adminModeEnabled! = Boolean.FALSE
 REM             #buttonAdmin!.setForeColor(#ADMIN_DISABLED_COLOR!)
-            #buttonAdmin!.setImageFile(#iconPrefix! + "icon/admin_off.png")
+            #buttonAdmin!.setImageFile(#iconButtonAdminDisabled!)
             #buttonAdmin!.setShortCue("Admin mode (currently disabled)")
             #bc!.setUserName(#userName!)
         else
             #adminModeEnabled! = Boolean.TRUE
 REM             #buttonAdmin!.setForeColor(#ADMIN_ENABLED_COLOR!)
-            #buttonAdmin!.setImageFile(#iconPrefix! + "icon/admin_on.png")
+            #buttonAdmin!.setImageFile(#iconButtonAdminEnabled!)
             #buttonAdmin!.setShortCue("Admin mode (currently enabled)")
             #bc!.setUserName(#bc!.getAdminUser())
         endif
