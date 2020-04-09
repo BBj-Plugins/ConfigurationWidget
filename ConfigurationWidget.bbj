@@ -40,8 +40,8 @@ class public ConfigurationWidget extends BBjWidget
     field protected static String ON_STATE_CHANGE! = "STATE_CHANGE"
     field protected static String ON_CONFIGURATION_CHANGE! = "CONFIGURATION_CHANGE"
     
-    field protected String iconButtonDelete! =          "ConfigurationWidget\icon\ic_delete_forever_black_24dp.png"
-    field protected String iconButtonSave! =            "ConfigurationWidget\icon\ic_done_black_24dp.png"
+    field protected String iconButtonDelete! =          "ConfigurationWidget\icon\ic_close_black_24dp.png"
+    field protected String iconButtonSave! =            "ConfigurationWidget\icon\ic_save_black_24dp.png"
     field protected String iconButtonAdminEnabled! =    "ConfigurationWidget\icon\ic_person_black_24dp.png"
     field protected String iconButtonAdminDisabled! =   "ConfigurationWidget\icon\ic_person_white_24dp.png"
     
@@ -148,8 +148,8 @@ class public ConfigurationWidget extends BBjWidget
     rem  */
     method public void redraw(Boolean f_init!)
         if (f_init!) then
-            #listEditOptions!   = #getCanvas().addListEdit(#getCanvas().getAvailableControlID(), 0, 0, 100, 20, "")
-            #listEditOptions!.setFieldHeight(20)
+            #listEditOptions!   = #getCanvas().addListEdit(#getCanvas().getAvailableControlID(), 0, 1, 100, 20, "")
+            #listEditOptions!.setFieldHeight(18)
             #buttonDelete!      = #getCanvas().addButton(#getCanvas().getAvailableControlID(), 100,0,20,20,"")
             #buttonSave!        = #getCanvas().addButton(#getCanvas().getAvailableControlID(), 120,0,20,20,"")
             #buttonDelete!.setShortCue("delete configuration")
@@ -181,7 +181,7 @@ class public ConfigurationWidget extends BBjWidget
             #getCanvas().setSize(#getCanvas().getWidth(),20)
         endif
         #getCanvas().setLocation(xStart,#getY())
-        #listEditOptions!.setLocation(0,0)
+        #listEditOptions!.setLocation(0,1)
         #listEditOptions!.setSize(100,100)
         #buttonDelete!.setLocation(buttonsX,buttonsY)
         #buttonDelete!.setSize(20,20)
@@ -233,9 +233,12 @@ class public ConfigurationWidget extends BBjWidget
     rem  */
     method protected void setIcons()
         #buttonDelete!.setImageFile(    #iconButtonDelete!)
+        #buttonDelete!.setImageSize(20,20)
         #buttonSave!.setImageFile(      #iconButtonSave!)
+        #buttonSave!.setImageSize(20,20)
         if #allowAdmin! then
             #buttonAdmin!.setImageFile( #iconButtonAdminDisabled!)
+            #buttonAdmin!.setImageSize(20,20)
         endif
     methodend
     
