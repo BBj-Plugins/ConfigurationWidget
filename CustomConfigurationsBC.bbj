@@ -39,6 +39,19 @@ REM         path! = "C:\Users\FOO\Documents\00tempConfigscanbedeleted"
         #createDataFile(path!,template!, 4)
         #configurationsBC! = new ConfigurationsBC(path!, userName!)
     methodend
+
+    method public CustomConfigurationsBC(String userName!, String fileName!)
+        bbjHome! = new File(System.getProperty("basis.BBjHome"),err=*next)
+        if bbjHome! <> null() then
+            path! = bbjHome!.getPath() + File.separator + "cfg" + File.separator + fileName!
+        
+        else
+            path! = dsk("") + dir("") + "configurationWidgetConfigs"
+        endif
+        template! = "REALM:C(3*=10):DESCRIPTION=Realm:,KEYX:C(40*=10):DESCRIPTION=Key:,USERID:C(64*=10):DESCRIPTION=UserID:,SETTING:C(40*=10):DESCRIPTION=Setting:,CR_MONT:C(10*=10):DESCRIPTION=createduser:,CR_TS_LD:C(14*=10):DESCRIPTION=createdtimestamp:,MOD_MONT:C(10*=10):DESCRIPTION=modificationuser:,MOD_TS_LD:C(14*=10):DESCRIPTION=modificationtimestamp:,CONFIG:C(1*=10):DESCRIPTION=Configurationpayload:"
+        #createDataFile(path!,template!, 4)
+        #configurationsBC! = new ConfigurationsBC(path!, userName!)
+    methodend
     
     method public String getConfigFile()
         methodret #configurationsBC!.getConfigFile()
