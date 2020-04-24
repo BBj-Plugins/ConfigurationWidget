@@ -570,7 +570,7 @@ REM             #buttonAdmin!.setForeColor(#ADMIN_ENABLED_COLOR!)
         #popupMenu!.removeMenuItem(#menuDelete!,err=*next)
         #menuDelete! = null()
         if visible! then
-            #menuDelete! = #popupMenu!.insertMenuItem(0, 1100, "Save")
+            #menuDelete! = #popupMenu!.insertMenuItem(0, 1100, "Delete")
             #menuDelete!.setCallback(BBjPopupMenu.ON_POPUP_ITEM_SELECT, #this!, "deleteButtonPush")
         endif
     methodend
