@@ -23,6 +23,22 @@ class public ConfigurationWidget extends BBjWidget
     field protected BBjButton buttonDelete!
     field protected BBjButton buttonSave!
     field protected BBjButton buttonAdmin!
+    
+    field protected Boolean buttonSaveEnabled! = Boolean.FALSE
+    field protected Boolean buttonDeleteEnabled! = Boolean.FALSE
+    field protected Boolean buttonAdminEnabled! = Boolean.FALSE
+    
+    field protected Boolean popupMode! = Boolean.FALSE
+    
+    
+    field protected BBjMenuButton popupButton!
+    field protected BBjPopupMenu popupMenu!
+    field protected BBjMenuItem menuDelete!
+    field protected BBjMenuItem menuSave!
+    field protected BBjCheckableMenuItem menuAdmin!
+    
+    
+    
     field protected BBjListEdit listEditOptions!
     field protected ResultSet availableConfigs!
     field protected IConfigurationsBC bc!
@@ -49,6 +65,8 @@ class public ConfigurationWidget extends BBjWidget
     field protected BBjNumber selectedIndex = -1
     field protected String widgetID! = UUID.randomUUID().toString()
     field protected ConfigurationStateHandler stateHandler!
+    
+    field protected BBjNumber minPaddingLeft = 0
     
     rem /**
     rem  * default constructor disabled
@@ -85,6 +103,49 @@ class public ConfigurationWidget extends BBjWidget
         #bc! = bc!
         #setUserName(#bc!.getUserName())
         #redraw(0)
+    methodend
+    
+    method protected void createPopupButton()
+        #popupButton! = #getCanvas().addMenuButton(#getCanvas().getAvailableControlID(), 100,0,20,20, "")
+        #popupMenu! = #popupButton!.addDropdownMenu()
+REM         #listEditOptions!.setPopupMenu(#popupMenu!)
+REM         #popupMenu!.setLocation(#buttonDelete!.getX(), #buttonDelete!.getY()) 
+        
+REM         #popupMenu! = BBjAPI().getSysGui().addDropdownMenu()
+        #menuDelete! = #popupMenu!.insertMenuItem(0, 1000, "Delete")
+        #menuDelete!.setCallback(BBjPopupMenu.ON_POPUP_ITEM_SELECT, #this!, "deleteButtonPush")
+        #menuSave!   = #popupMenu!.insertMenuItem(1, 1100, "Save")
+        #menuSave!.setCallback(BBjPopupMenu.ON_POPUP_ITEM_SELECT, #this!, "saveButtonPush")
+        
+        if #allowAdmin! then
+            #menuAdmin! = #popupMenu!.insertCheckableMenuItem(2, 1200, "Admin",#adminModeEnabled!)
+REM             #menuAdmin!.setCallback(#menuAdmin!.ON_MENU_ITEM_SELECT, #this!, "adminButtonPush")
+        endif
+    methodend
+    
+    method protected void togglePopupMode(Boolean popupVisible!)
+        #popupMode! = popupVisible!
+        #updateButtons()
+    methodend
+    
+    method protected void updateButtons()
+        if #popupMode! then
+            #popupButton!.setVisible(1)
+REM             #listEditOptions!.setPopupMenu(#popupMenu!)
+REM             #popupMenu!.setVisible(Boolean.TRUE)
+            
+            #buttonDelete!.setVisible(Boolean.FALSE)
+            #buttonSave!.setVisible(Boolean.FALSE)
+            if #allowAdmin! then #buttonAdmin!.setVisible(Boolean.FALSE)
+        else
+            #popupButton!.setVisible(0)
+REM             #listEditOptions!.removePopupMenu()
+REM             #popupMenu!.setVisible(Boolean.TRUE)
+            
+            #buttonDelete!.setVisible(#buttonDeleteEnabled!)
+            #buttonSave!.setVisible(#buttonSaveEnabled!)
+            if #allowAdmin! then #buttonAdmin!.setVisible(Boolean.TRUE)
+        endif
     methodend
     
     rem /**
@@ -141,6 +202,14 @@ class public ConfigurationWidget extends BBjWidget
         #setIcons()
     methodend
     
+    method public void setMinPaddingLeft(BBjNumber minPaddingLeft)
+        #minPaddingLeft = minPaddingLeft
+    methodend
+    
+    method public BBjNumber getMinPaddingLeft()
+        methodret #minPaddingLeft
+    methodend
+    
     rem /**
     rem  * @Override
     rem  * This method is called whenever the widget needs to be rendered
@@ -154,32 +223,27 @@ class public ConfigurationWidget extends BBjWidget
             #buttonSave!        = #getCanvas().addButton(#getCanvas().getAvailableControlID(), 120,0,20,20,"")
             #buttonDelete!.setShortCue("delete configuration")
             #buttonSave!.setShortCue("save")
-            #buttonSave!.setVisible(0)
             if #allowAdmin! then
                 #buttonAdmin!       = #getCanvas().addButton(#getCanvas().getAvailableControlID(), 140,0,20,20,"")
                 #buttonAdmin!.setShortCue("Admin mode (currently disabled)")
             endif
+            #createPopupButton()
+            #toggleSaveButton(Boolean.FALSE)
+REM             #togglePopupMode(Boolean.FALSE)
         FI
         if !#bcInitialized! and #bc!<> null() then
             #init()
             #bcInitialized! = Boolean.TRUE
         endif
         
-        xEnd = #getX() + 160
+        xEnd = #getX() + 160 
         if xEnd > #container!.getWidth() then xEnd = #container!.getWidth()
         xStart = xEnd - 160
-        if xStart < 0 then xStart = 0
+        if xStart < #minPaddingLeft then xStart = #minPaddingLeft
         totalLength = xEnd - xStart
         if totalLength < 100 then totalLength = 100
-        if totalLength < 160 then
-            buttonsX = 0
-            buttonsY = 20
-            #getCanvas().setSize(#getCanvas().getWidth(),40)
-        else
-            buttonsX = 100
-            buttonsY = 0
-            #getCanvas().setSize(#getCanvas().getWidth(),20)
-        endif
+        buttonsX = 100
+        buttonsY = 0
         #getCanvas().setLocation(xStart,#getY())
         #listEditOptions!.setLocation(0,1)
         #listEditOptions!.setSize(100,100)
@@ -190,6 +254,17 @@ class public ConfigurationWidget extends BBjWidget
         if #allowAdmin! then
             #buttonAdmin!.setLocation(buttonsX + 40,buttonsY)
             #buttonAdmin!.setSize(20,20)
+        endif
+        if totalLength < 160 then
+            #togglePopupMode(Boolean.TRUE)
+REM             buttonsX = 0
+REM             buttonsY = 20
+REM             #getCanvas().setSize(#getCanvas().getWidth(),40)
+        else
+            #togglePopupMode(Boolean.FALSE)
+REM             buttonsX = 100
+REM             buttonsY = 0
+REM             #getCanvas().setSize(#getCanvas().getWidth(),20)
         endif
         
     methodend
@@ -310,7 +385,7 @@ REM         BBjAPI().setCustomEventCallback(#getOnStateChangeEventName(), #this!
     rem  * Only when admin mode is enabled, user should be able to save default settings
     rem  */
     method public void listEditOptionsModify(BBjEvent ev!)
-        #buttonSave!.setVisible(1)
+        #toggleSaveButton(Boolean.TRUE)
     methodend
     
     rem /**
@@ -388,7 +463,7 @@ REM         BBjAPI().setCustomEventCallback(#getOnStateChangeEventName(), #this!
     rem  * event handler for delete button push
     rem  * deletes the currently selected configuration and selects the successor (or predecessor if last).
     rem  */
-    method public void deleteButtonPush(BBjButtonPushEvent ev!)
+    method public void deleteButtonPush(BBjEvent ev!)
         seterr removalerror
         toBeDeletedDR! = #getSelectedConfig()
         if toBeDeletedDR! = null() or toBeDeletedDR!.isEmpty() then methodret
@@ -416,18 +491,20 @@ REM         BBjAPI().setCustomEventCallback(#getOnStateChangeEventName(), #this!
     rem /**
     rem  * onclick event for the admin button. toggles mode and image
     rem  */
-    method public void adminButtonPush(BBjButtonPushEvent ev!)
+    method public void adminButtonPush(BBjEvent ev!)
         if #adminModeEnabled! then
             #adminModeEnabled! = Boolean.FALSE
 REM             #buttonAdmin!.setForeColor(#ADMIN_DISABLED_COLOR!)
             #buttonAdmin!.setImageFile(#iconButtonAdminDisabled!)
             #buttonAdmin!.setShortCue("Admin mode (currently disabled)")
+            #menuAdmin!.setSelected(Boolean.FALSE)
             #bc!.setUserName(#userName!)
         else
             #adminModeEnabled! = Boolean.TRUE
 REM             #buttonAdmin!.setForeColor(#ADMIN_ENABLED_COLOR!)
             #buttonAdmin!.setImageFile(#iconButtonAdminEnabled!)
             #buttonAdmin!.setShortCue("Admin mode (currently enabled)")
+            #menuAdmin!.setSelected(Boolean.TRUE)
             #bc!.setUserName(#bc!.getAdminUser())
         endif
         #updateButtonDelete()
@@ -436,7 +513,7 @@ REM             #buttonAdmin!.setForeColor(#ADMIN_ENABLED_COLOR!)
     rem /**
     rem  * event handler for save button push
     rem  */
-    method public void saveButtonPush(BBjButtonPushEvent ev!)
+    method public void saveButtonPush(BBjEvent ev!)
         #saveConfiguration()
     methodend
     
@@ -449,7 +526,7 @@ REM             #buttonAdmin!.setForeColor(#ADMIN_ENABLED_COLOR!)
         if ev!.getSelectedIndex() = #selectedIndex then methodret
         #selectedIndex = ev!.getSelectedIndex()
         selectedConf! = #getSelectedConfig()
-        #buttonSave!.setVisible(0)
+        #toggleSaveButton(Boolean.FALSE)
         #fireConfigurationChangeEvent()
         #updateButtonDelete()
     methodend
@@ -461,14 +538,10 @@ REM             #buttonAdmin!.setForeColor(#ADMIN_ENABLED_COLOR!)
     method protected void updateButtonDelete()
         selectedConf! = #getSelectedConfig()
         if selectedConf! = null() or selectedConf!.isEmpty() then
-            #buttonDelete!.setVisible(0)
+            #toggleDeleteButton(Boolean.FALSE)
             methodret
         endif
-        if #bc!.canModify(selectedConf!) then
-            #buttonDelete!.setVisible(1)
-        else
-            #buttonDelete!.setVisible(0)
-        endif
+        #toggleDeleteButton(#bc!.canModify(selectedConf!))
     methodend
     
     rem /**
@@ -476,8 +549,52 @@ REM             #buttonAdmin!.setForeColor(#ADMIN_ENABLED_COLOR!)
     rem  * right now, the save button will enable
     rem  */
     method public void stateChange()
-        #buttonSave!.setVisible(1)
+        #toggleSaveButton(Boolean.TRUE)
     methodend
+    
+    method public void toggleMenuSaveButton(Boolean visible!)
+        if visible! and #menuSave! <> null() then methodret
+        if !visible! and #menuSave! = null() then methodret
+        #popupMenu!.removeMenuItem(#menuSave!,err=*next)
+        #menuSave! = null()
+        if visible! then
+            #menuSave! = #popupMenu!.insertMenuItem(1, 1100, "Save")
+            #menuSave!.setCallback(BBjPopupMenu.ON_POPUP_ITEM_SELECT, #this!, "saveButtonPush")
+        endif
+    methodend
+    
+    
+    method public void toggleMenuDeleteButton(Boolean visible!)
+        if visible! and #menuDelete! <> null() then methodret
+        if !visible! and #menuDelete! = null() then methodret
+        #popupMenu!.removeMenuItem(#menuDelete!,err=*next)
+        #menuDelete! = null()
+        if visible! then
+            #menuDelete! = #popupMenu!.insertMenuItem(0, 1100, "Save")
+            #menuDelete!.setCallback(BBjPopupMenu.ON_POPUP_ITEM_SELECT, #this!, "deleteButtonPush")
+        endif
+    methodend
+    
+    method public void toggleSaveButton(Boolean visible!)
+        if visible! then
+            #buttonSaveEnabled! = Boolean.TRUE
+        else
+            #buttonSaveEnabled! = Boolean.FALSE
+        endif
+        #toggleMenuSaveButton(visible!)
+        #updateButtons()
+    methodend
+    
+    method public void toggleDeleteButton(Boolean visible!)
+        if visible! then
+            #buttonDeleteEnabled! = Boolean.TRUE
+        else
+            #buttonDeleteEnabled! = Boolean.FALSE
+        endif
+        #toggleMenuDeleteButton(visible!)
+        #updateButtons()
+    methodend
+    
     
     rem /**
     rem  * notifies the state handler that a configuration has changed. the statehandler will then apply this new config to the component.
@@ -502,7 +619,7 @@ REM         gridstate! = #grid!.getColumnState()
         #fetchAndFillOptionListEdit()
         #selectDataRowInOptions(selectedConfig!)
 REM         #currentConfig! = ""
-        #buttonSave!.setVisible(0)
+        #toggleSaveButton(Boolean.FALSE)
         #updateButtonDelete()
     methodend
     
